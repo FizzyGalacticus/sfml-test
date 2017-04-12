@@ -22,32 +22,6 @@ int main(int argc, char const *argv[])
 
 	Background gameBackground;
 
-	// sf::Texture backgroundTexture;
-	// if(!backgroundTexture.loadFromFile("sprites/background.png"))
-		// cout << "Could not load background texture..." << endl;
-
-	// sf::Sprite backgroundSprite;
-	// backgroundSprite.setTexture(backgroundTexture);
-	// backgroundSprite.setTextureRect(sf::IntRect(2,3,464,224));
-
-	// std::vector<sf::IntRect> waterRects = {
-	// 	sf::IntRect(2,247,464,60),
-	// 	sf::IntRect(469,247,464,60),
-	// 	sf::IntRect(936,247,464,60),
-	// 	sf::IntRect(1403,247,464,60),
-	// 	sf::IntRect(1870,247,464,60),
-	// 	sf::IntRect(2337,247,464,60),
-	// 	sf::IntRect(2804,247,464,60),
-	// 	sf::IntRect(3271,247,464,60)
-	// };
-
-	// unsigned int waterIndex = 0;
-
-	// sf::Sprite backgroundWaterSprite;
-	// backgroundWaterSprite.setTexture(backgroundTexture);
-	// backgroundWaterSprite.setTextureRect(waterRects[waterIndex]);
-	// backgroundWaterSprite.setPosition(sf::Vector2f(0,164));
-
 	sf::Clock clock;
 
 	srand(time(NULL));
@@ -68,43 +42,8 @@ int main(int argc, char const *argv[])
 				renderWindow.close();
 		}
 
-		GameObject::updateAll(renderWindow, clock.getElapsedTime().asMilliseconds());
-
-		// if(clock.getElapsedTime().asMicroseconds() % 100000 == 0) {
-
-		// }
-
-		if(clock.getElapsedTime().asMicroseconds() > 60000) {
-			// if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-			// 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-			// 		sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			// 		color.r = 0;
-			// }
-			// else color.r = (color.r+randomColorRange(randomNumbers) % 255);//randomColorRange(randomNumbers);
-
-			// if(sf::Keyboard::isKeyPressed(sf::Keyboard::G)) {
-			// 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-			// 		sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			// 		color.g = 0;
-			// }
-			// else color.g = (color.g+randomColorRange(randomNumbers) % 255);//randomColorRange(randomNumbers);
-
-			// if(sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
-			// 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-			// 		sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
-			// 		color.b = 0;
-			// }
-			// else color.b = (color.b+randomColorRange(randomNumbers) % 255);//randomColorRange(randomNumbers);
-
-			// waterIndex = (waterIndex < waterRects.size()-1 ? waterIndex+1:0);
-			// backgroundWaterSprite.setTextureRect(waterRects[waterIndex]);
-
-			clock.restart();
-		}
-
 		renderWindow.clear(color);
-		// renderWindow.draw(backgroundSprite);
-		// renderWindow.draw(backgroundWaterSprite);
+		GameObject::updateAll(&renderWindow, clock.getElapsedTime().asMilliseconds());
 		renderWindow.display();
 
 	}

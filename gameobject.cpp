@@ -17,12 +17,12 @@ GameObject::~GameObject() {
 	GameObject::_objects.erase(GameObject::_objects.begin()+this->_objIndex);
 }
 
-void GameObject::update(RenderWindow & window, const uint64_t & milliseconds) {
+void GameObject::update(RenderWindow * window, const uint64_t & milliseconds) {
 	this->setLastUpdate(milliseconds);
 	cout << "Calling the wrong update function... =(" << endl;
 }
 
-void GameObject::updateAll(RenderWindow & window, const uint64_t & milliseconds) {
+void GameObject::updateAll(RenderWindow * window, const uint64_t & milliseconds) {
 	for(auto obj : GameObject::_objects)
 		obj->update(window, milliseconds);
 }
