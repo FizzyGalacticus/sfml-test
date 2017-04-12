@@ -1,41 +1,52 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <random>
 #include <vector>
 
 #include "gameobject.h"
 #include "background.h"
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
 int main(int argc, char const *argv[])
 {
-	sf::RenderWindow renderWindow(sf::VideoMode(464,224), "SFML Demo");
+	if(GameObject::getDebugging())
+		cout << "Debugging mode on" << endl;
+	else
+		cout << "Debugging mode off" << endl;
+
+	sf::RenderWindow renderWindow(sf::VideoMode(464,224), "SFML Test");
 	sf::Event event;
 	sf::Color color(sf::Color::Red);
 
-	sf::Texture backgroundTexture;
-	if(!backgroundTexture.loadFromFile("sprites/background.png"));
+	Background gameBackground;
 
-	sf::Sprite backgroundSprite;
-	backgroundSprite.setTexture(backgroundTexture);
-	backgroundSprite.setTextureRect(sf::IntRect(2,3,464,224));
+	// sf::Texture backgroundTexture;
+	// if(!backgroundTexture.loadFromFile("sprites/background.png"))
+		// cout << "Could not load background texture..." << endl;
 
-	std::vector<sf::IntRect> waterRects = {
-		sf::IntRect(2,247,464,60),
-		sf::IntRect(469,247,464,60),
-		sf::IntRect(936,247,464,60),
-		sf::IntRect(1403,247,464,60),
-		sf::IntRect(1870,247,464,60),
-		sf::IntRect(2337,247,464,60),
-		sf::IntRect(2804,247,464,60),
-		sf::IntRect(3271,247,464,60)
-	};
+	// sf::Sprite backgroundSprite;
+	// backgroundSprite.setTexture(backgroundTexture);
+	// backgroundSprite.setTextureRect(sf::IntRect(2,3,464,224));
 
-	unsigned int waterIndex = 0;
+	// std::vector<sf::IntRect> waterRects = {
+	// 	sf::IntRect(2,247,464,60),
+	// 	sf::IntRect(469,247,464,60),
+	// 	sf::IntRect(936,247,464,60),
+	// 	sf::IntRect(1403,247,464,60),
+	// 	sf::IntRect(1870,247,464,60),
+	// 	sf::IntRect(2337,247,464,60),
+	// 	sf::IntRect(2804,247,464,60),
+	// 	sf::IntRect(3271,247,464,60)
+	// };
 
-	sf::Sprite backgroundWaterSprite;
-	backgroundWaterSprite.setTexture(backgroundTexture);
-	backgroundWaterSprite.setTextureRect(waterRects[waterIndex]);
-	backgroundWaterSprite.setPosition(sf::Vector2f(0,164));
+	// unsigned int waterIndex = 0;
+
+	// sf::Sprite backgroundWaterSprite;
+	// backgroundWaterSprite.setTexture(backgroundTexture);
+	// backgroundWaterSprite.setTextureRect(waterRects[waterIndex]);
+	// backgroundWaterSprite.setPosition(sf::Vector2f(0,164));
 
 	sf::Clock clock;
 
@@ -50,6 +61,14 @@ int main(int argc, char const *argv[])
 			if(event.type == sf::Event::EventType::Closed)
 				renderWindow.close();
 		}
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+			if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))
+				renderWindow.close();
+		}
+
+		GameObject::updateAll(renderWindow, clock.getElapsedTime().asMilliseconds());
 
 		// if(clock.getElapsedTime().asMicroseconds() % 100000 == 0) {
 
@@ -77,15 +96,15 @@ int main(int argc, char const *argv[])
 			// }
 			// else color.b = (color.b+randomColorRange(randomNumbers) % 255);//randomColorRange(randomNumbers);
 
-			waterIndex = (waterIndex < waterRects.size()-1 ? waterIndex+1:0);
-			backgroundWaterSprite.setTextureRect(waterRects[waterIndex]);
+			// waterIndex = (waterIndex < waterRects.size()-1 ? waterIndex+1:0);
+			// backgroundWaterSprite.setTextureRect(waterRects[waterIndex]);
 
 			clock.restart();
 		}
 
 		renderWindow.clear(color);
-		renderWindow.draw(backgroundSprite);
-		renderWindow.draw(backgroundWaterSprite);
+		// renderWindow.draw(backgroundSprite);
+		// renderWindow.draw(backgroundWaterSprite);
 		renderWindow.display();
 
 	}

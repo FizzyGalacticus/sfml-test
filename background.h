@@ -21,7 +21,7 @@ class Background : public GameObject {
 		Background();
 		Background(shared_ptr<Texture> texture);
 		~Background();
-		void update(RenderWindow & window, const uint64_t & microseconds);
+		void update(RenderWindow & window, const uint64_t & milliseconds);
 
 	private:
 		shared_ptr<Texture> _texture;

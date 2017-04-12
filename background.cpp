@@ -4,12 +4,15 @@
 using std::cout;
 using std::endl;
 
-Background::Background() {
+Background::Background() :
+_waterIndex(0)
+{
 	this->_texture = make_shared<Texture>();
 
 	if(!this->_texture->loadFromFile("sprites/background.png"))
-		if(this->getDebugging())
-			cout << "Could not load background texture..." << endl;
+		cout << "Could not load background texture..." << endl;
+	else
+		cout << "Background texture loaded." << endl;
 
 	this->_waterRects = {
 		IntRect(2,247,464,60),
@@ -21,6 +24,7 @@ Background::Background() {
 		IntRect(2804,247,464,60),
 		IntRect(3271,247,464,60)
 	};
+
 
 	this->_mainSprite = make_shared<Sprite>();
 	this->_waterSprite = make_shared<Sprite>();
@@ -56,12 +60,12 @@ Background::~Background() {
 
 }
 
-void Background::update(RenderWindow & window, const uint64_t & microseconds) {
-	if(this->getTimeSinceLastUpdate(microseconds) > 60000) {
-		this->_waterIndex = (this->_waterIndex < this->_waterRects.size()-1 ? this->_waterIndex+1:0);
-		this->_waterSprite->setTextureRect((this->_waterRects[this->_waterIndex]));
-		this->setLastUpdate(microseconds);
-	}
+void Background::update(RenderWindow & window, const uint64_t & milliseconds) {
+	// if(this->getTimeSinceLastUpdate(milliseconds) > 2) {
+	// 	this->_waterIndex = (this->_waterIndex < this->_waterRects.size()-1 ? this->_waterIndex+1:0);
+	// 	this->_waterSprite->setTextureRect((this->_waterRects[this->_waterIndex]));
+	// 	this->setLastUpdate(milliseconds);
+	// }
 
 	window.draw(*(this->_mainSprite));
 	window.draw(*(this->_waterSprite));
