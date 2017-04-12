@@ -3,6 +3,9 @@
 #include <random>
 #include <vector>
 
+#include "gameobject.h"
+#include "background.h"
+
 int main(int argc, char const *argv[])
 {
 	sf::RenderWindow renderWindow(sf::VideoMode(464,224), "SFML Demo");
