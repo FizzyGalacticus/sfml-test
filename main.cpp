@@ -4,6 +4,7 @@
 
 #include "gameobject.h"
 #include "background.h"
+#include "player.h"
 
 #include <iostream>
 using std::cout;
@@ -21,6 +22,7 @@ int main(int argc, char const *argv[])
 	sf::Color color(sf::Color::Red);
 
 	Background gameBackground;
+	Player player;
 
 	sf::Clock clock;
 
