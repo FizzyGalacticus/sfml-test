@@ -21,7 +21,8 @@ _jumpingRects{
 _runningIndex(0),
 _jumpingIndex(0),
 _direction(0),
-_jumping(false)
+_jumping(false),
+_running(false)
 {
 	this->_texture = make_shared<Texture>();
 	this->_mainSprite = make_shared<Sprite>();
@@ -41,7 +42,7 @@ _jumping(false)
 	}
 
 	this->setMaxAcceleration(0.1);
-	this->setMaxVelocity(3);
+	this->setMaxVelocity(0.01);
 }
 
 void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
@@ -63,7 +64,7 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 
 		this->_mainSprite->setPosition(this->_position);
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) { //Walking left
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !this->_jumping) { //Walking left
 			if(this->_direction != 1) {
 				this->_mainSprite->scale(-1,1);
 				this->_direction = 1;
@@ -72,9 +73,12 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 			this->_mainSprite->setTextureRect(this->_runningRects[this->_runningIndex]);
 			this->_runningIndex = (this->_runningIndex < this->_runningRects.size()-1 ? this->_runningIndex+1:0);
 
-			this->setAcceleration(-0.05f, currentAcceleration.y);
+			if(!this->_running) {
+				this->setAcceleration(-0.0005f, currentAcceleration.y);
+				this->_running = true;
+			}
 		}
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) { //Walking right
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->_jumping) { //Walking right
 			if(this->_direction == 1) {
 				this->_mainSprite->scale(-1,1);
 				this->_direction = 0;
@@ -83,18 +87,25 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 			this->_mainSprite->setTextureRect(this->_runningRects[this->_runningIndex]);
 			this->_runningIndex = (this->_runningIndex < this->_runningRects.size()-1 ? this->_runningIndex+1:0);
 
-			this->setAcceleration(0.05f, currentAcceleration.y);
+			if(!this->_running) {
+				this->setAcceleration(0.0005f, currentAcceleration.y);
+				this->_running = true;
+			}
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->_position.y == GROUND_LEVEL) { //Crouch
 			this->_mainSprite->setTextureRect(IntRect(46,0,46,50));
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !this->_jumping) { //Jump
-			this->setAcceleration(currentAcceleration.x, -0.05f);
-			this->_jumping = true;
+			if(!this->_jumping) {
+				this->setAcceleration(currentAcceleration.x, -0.015f);
+				this->_jumping = true;
+			}
 		}
 		else {
 			this->_runningIndex = 0;
 			this->_jumpingIndex = 0;
+			this->_running      = false;
+			this->_running      = false;
 			this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
 		}
 

@@ -8,7 +8,9 @@ using std::endl;
 
 MoveableObject::MoveableObject() :
 _velocity(0.f, 0.f),
-_acceleration(0.f,0.f)
+_acceleration(0.f,0.f),
+_maxVelocity(1.f),
+_maxAcceleration(1.f)
 {
 
 }
@@ -78,19 +80,6 @@ void MoveableObject::move(const uint64_t & milliseconds) {
 	else if(this->_acceleration.x < -1*this->_maxAcceleration)
 		this->_acceleration.x = -1*this->_maxAcceleration;
 
-	// if(this->_velocity.x != 0) {
-	// 	float friction = this->_acceleration.x/2;//10 * GRAVITY;
-	// 	if(signOfAccelerationX)
-	// 		friction *= -1;
-
-	// 	this->_acceleration.x += friction;
-
-	// 	if(signOfAccelerationX && this->_acceleration.x < 0.0005)
-	// 		this->_acceleration.x = 0;
-	// 	else if(!signOfAccelerationX && this->_acceleration.x > -0.0005)
-	// 		this->_acceleration.x = 0;
-	// }
-
 	this->_velocity.x = this->_velocity.x + this->_acceleration.x*time;
 	this->_velocity.y = this->_velocity.y + (this->_acceleration.y + GRAVITY)*time;
 
@@ -99,10 +88,10 @@ void MoveableObject::move(const uint64_t & milliseconds) {
 	else if(this->_velocity.y < -1*0.16)
 		this->_velocity.y = -1*0.16;
 
-	if(this->_velocity.x > 0.04)
-		this->_velocity.x = 0.04;
-	else if(this->_velocity.x < -1*0.04)
-		this->_velocity.x = -1*0.04;
+	if(this->_velocity.x > this->_maxVelocity)
+		this->_velocity.x = this->_maxVelocity;
+	else if(this->_velocity.x < -1*this->_maxVelocity)
+		this->_velocity.x = -1*this->_maxVelocity;
 
 	this->_position.x = this->_position.x + this->_velocity.x*(timeSinceLastUpdate % 40) + 0.5*this->_acceleration.x*pow(time, 2);
 	this->_position.y = this->_position.y + this->_velocity.y*time + 0.5*(this->_acceleration.y + GRAVITY)*pow(time, 2);
