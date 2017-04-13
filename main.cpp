@@ -2,6 +2,7 @@
 #include <random>
 #include <vector>
 
+#include "constants.h"
 #include "gameobject.h"
 #include "background.h"
 #include "player.h"

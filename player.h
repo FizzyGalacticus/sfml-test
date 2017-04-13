@@ -1,6 +1,7 @@
 #ifndef __PLAYER_H_
 #define __PLAYER_H_
 
+#include "constants.h"
 #include "moveableobject.h"
 
 #include <memory>
@@ -30,6 +31,7 @@ class Player : public MoveableObject
 		unsigned int _runningIndex;
 		unsigned int _jumpingIndex;
 		unsigned int _direction;
+		bool _jumping;
 };
 
 #endif
