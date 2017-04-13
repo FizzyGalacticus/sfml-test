@@ -1,7 +1,7 @@
 #ifndef __PLAYER_H_
 #define __PLAYER_H_
 
-#include "gameobject.h"
+#include "moveableobject.h"
 
 #include <memory>
 using std::shared_ptr;
@@ -16,7 +16,7 @@ using sf::IntRect;
 #include <vector>
 using std::vector;
 
-class Player : public GameObject
+class Player : public MoveableObject
 {
 	public:
 		Player();

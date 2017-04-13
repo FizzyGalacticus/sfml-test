@@ -27,11 +27,11 @@ _direction(0)
 
 	if(!(this->_texture->loadFromFile("sprites/player.png"))) {
 		if(this->getDebugging())
-			cout << "Could not load background texture..." << endl;
+			cout << "Could not load player texture..." << endl;
 	}
 	else {
 		if(this->getDebugging())
-			cout << "Background texture loaded." << endl;
+			cout << "Player texture loaded." << endl;
 
 		this->_mainSprite->setTexture(*(this->_texture));
 		this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
