@@ -16,7 +16,8 @@ _runningRects{
 		IntRect(322,150,46,50)
 	},
 _jumpingRects{
-
+		IntRect(322,0,46,50),
+		IntRect(276,0,46,50)
 	},
 _runningIndex(0),
 _jumpingIndex(0),
@@ -99,15 +100,12 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !this->_jumping) { //Jump
 			if(!this->_jumping) {
-				this->setAcceleration(currentAcceleration.x, -0.015f);
+				this->setAcceleration(currentAcceleration.x, -0.01007f);
 				this->_jumping = true;
+				this->_mainSprite->setTextureRect(this->_jumpingRects[0]);
 			}
 		}
 		else {
-			this->_runningIndex = 0;
-			this->_jumpingIndex = 0;
-			this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
-
 			if(this->_running) {
 				if(currentVelocity.x != 0) {
 					if(!this->_stopping) {
@@ -121,17 +119,29 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 					}
 				}
 				else {
-					this->_jumping  = false;
 					this->_running  = false;
 					this->_stopping = false;
 				}
 			}
-
-			cout << "Direction: " << this->_direction << endl;
-			cout << "Running: " << this->_running << endl;
-			cout << "Stopping: " << this->_stopping << endl;
-			cout << "Acceleration: " << '(' << currentAcceleration.x << ',' << currentAcceleration.y << ')' << endl;
-			cout << "Velocity: " << '(' << currentVelocity.x << ',' << currentVelocity.y << ')' << endl;
+			else if(this->_jumping) {
+				if(this->_position.y == GROUND_LEVEL) {
+					this->_jumping = false;
+					this->setAcceleration(currentAcceleration.x, 0);
+					this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
+				}
+				else if(currentAcceleration.y < 0) {
+					this->setAcceleration(currentAcceleration.x, currentAcceleration.y + 0.00003);
+					if(this->_jumpingIndex == 0) {
+						this->_jumpingIndex = 1;
+						this->_mainSprite->setTextureRect(this->_jumpingRects[1]);
+					}
+				}
+			}
+			else {
+				this->_runningIndex = 0;
+				this->_jumpingIndex = 0;
+				this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
+			}
 		}
 
 		this->setLastUpdate(milliseconds);
