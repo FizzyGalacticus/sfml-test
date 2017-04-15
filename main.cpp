@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
 	else
 		cout << "Debugging mode off" << endl;
 
-	sf::RenderWindow renderWindow(sf::VideoMode(464,224), "SFML Test");
+	sf::RenderWindow renderWindow(sf::VideoMode(WINDOW_WIDTH,WINDOW_HEIGHT), "SFML Test");
 	sf::Event event;
 	sf::Color color(sf::Color::Red);
 

@@ -33,6 +33,7 @@ class Player : public MoveableObject
 		unsigned int _direction;
 		bool _jumping;
 		bool _running;
+		bool _stopping;
 };
 
 #endif

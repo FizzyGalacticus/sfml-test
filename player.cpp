@@ -22,7 +22,8 @@ _runningIndex(0),
 _jumpingIndex(0),
 _direction(0),
 _jumping(false),
-_running(false)
+_running(false),
+_stopping(false)
 {
 	this->_texture = make_shared<Texture>();
 	this->_mainSprite = make_shared<Sprite>();
@@ -59,6 +60,7 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 		if(this->_position.y >= GROUND_LEVEL) {
 			this->_position.y = GROUND_LEVEL;
 			this->setAcceleration(currentAcceleration.x, 0);
+			this->setVelocity(currentVelocity.x, 0);
 			this->_jumping = false;
 		}
 
@@ -104,9 +106,32 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 		else {
 			this->_runningIndex = 0;
 			this->_jumpingIndex = 0;
-			this->_running      = false;
-			this->_running      = false;
 			this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
+
+			if(this->_running) {
+				if(currentVelocity.x != 0) {
+					if(!this->_stopping) {
+						int multiplier = (this->_direction ? 1:-1);
+						this->setAcceleration(0.00001f*multiplier,currentAcceleration.y);
+						this->_stopping = true;
+					}
+					else if((currentVelocity.x > 0 && this->_direction == 1) || (currentVelocity.x < 0 && this->_direction == 0)) {
+						this->setVelocity(0, currentVelocity.y);
+						this->setAcceleration(0, currentAcceleration.y);
+					}
+				}
+				else {
+					this->_jumping  = false;
+					this->_running  = false;
+					this->_stopping = false;
+				}
+			}
+
+			cout << "Direction: " << this->_direction << endl;
+			cout << "Running: " << this->_running << endl;
+			cout << "Stopping: " << this->_stopping << endl;
+			cout << "Acceleration: " << '(' << currentAcceleration.x << ',' << currentAcceleration.y << ')' << endl;
+			cout << "Velocity: " << '(' << currentVelocity.x << ',' << currentVelocity.y << ')' << endl;
 		}
 
 		this->setLastUpdate(milliseconds);
