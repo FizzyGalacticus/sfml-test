@@ -23,7 +23,7 @@ void Drawable::init() {
 
 	this->_fixture->shape = this->_shape;
 	this->_fixture->density = -1.0f;
-	this->_fixture->friction = 0.3f;
+	this->_fixture->friction = 0.1f;
 
 	this->_body = Drawable::_world.CreateBody(this->_bodyDef);
 	this->_body->CreateFixture(this->_fixture);

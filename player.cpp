@@ -23,7 +23,7 @@ _runningIndex(0),
 _jumpingIndex(0),
 _jumping(false),
 _running(false),
-_stopping(false)
+_direction(true)
 {
 	this->_texture = make_shared<Texture>();
 	this->_mainSprite = make_shared<Sprite>();
@@ -49,19 +49,31 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 	b2Vec2 position = body->GetPosition();
 
 	this->_mainSprite->setPosition(Vector2f(position.x*M2P, position.y*M2P));
+	this->_mainSprite->setRotation(body->GetAngle()*R2D);
 
-	if(this->getTimeSinceLastUpdate(milliseconds) > (BOX_TIMESTEP*1000.0f)) {
+	if(milliseconds > 50) {
 		sf::Vector2u windowSize = window->getSize();
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !this->_running) { //Walking left
-			this->_running = true;
-			body->SetLinearVelocity(b2Vec2(-3*P2M, 0));
-			this->_mainSprite->scale(-1,1);
+		if(this->_running && milliseconds > 200) {
+			this->_runningIndex = (this->_runningIndex < this->_runningRects.size() ? this->_runningIndex+1:0);
+			this->_mainSprite->setTextureRect(this->_runningRects[this->_runningIndex]);
 		}
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->_running) { //Walking right
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !this->_running) { //Running left
+			if(this->_direction) {
+				this->_mainSprite->setScale(-1,1);
+				this->_direction = false;
+			}
 			this->_running = true;
-			body->SetLinearVelocity(b2Vec2(3*P2M, 0));
-			this->_mainSprite->scale(1,1);
+			body->SetTransform(b2Vec2(position.x-(0.05*P2M),position.y), body->GetAngle());
+		}
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->_running) { //Running right
+			if(!this->_direction) {
+				this->_mainSprite->setScale(1,1);
+				this->_direction = true;
+			}
+			this->_running = true;
+			body->SetTransform(b2Vec2(position.x+(0.05*P2M),position.y), body->GetAngle());
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !this->_jumping) { //Crouch
 			this->_mainSprite->setTextureRect(IntRect(46,0,46,50));
@@ -75,11 +87,11 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 				body->SetLinearVelocity(b2Vec2(0,0));
 			}
 
-			this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
+			// this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
 		}
-
-		this->setLastUpdate(milliseconds);
 	}
+
+	this->setLastUpdate(milliseconds);
 
 	window->draw(*(this->_mainSprite));
 }

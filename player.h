@@ -32,7 +32,7 @@ class Player : public Drawable {
 		unsigned int _jumpingIndex;
 		bool _jumping;
 		bool _running;
-		bool _stopping;
+		bool _direction;
 };
 
 #endif
