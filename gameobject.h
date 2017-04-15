@@ -7,8 +7,7 @@ using sf::RenderWindow;
 #include <vector>
 using std::vector;
 
-class GameObject
-{
+class GameObject {
 	public:
 		GameObject();
 		~GameObject();
