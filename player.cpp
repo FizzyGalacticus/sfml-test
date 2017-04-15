@@ -44,23 +44,38 @@ _stopping(false)
 }
 
 void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
-	if(this->getTimeSinceLastUpdate(milliseconds) > 55) {
+	this->step();
+	b2Body * body   = this->getBody();
+	b2Vec2 position = body->GetPosition();
+
+	this->_mainSprite->setPosition(Vector2f(position.x*M2P, position.y*M2P));
+
+	if(this->getTimeSinceLastUpdate(milliseconds) > (BOX_TIMESTEP*1000.0f)) {
 		sf::Vector2u windowSize = window->getSize();
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !this->_jumping) { //Walking left
-			
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !this->_running) { //Walking left
+			this->_running = true;
+			body->SetLinearVelocity(b2Vec2(-3*P2M, 0));
+			this->_mainSprite->scale(-1,1);
 		}
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->_jumping) { //Walking right
-			
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->_running) { //Walking right
+			this->_running = true;
+			body->SetLinearVelocity(b2Vec2(3*P2M, 0));
+			this->_mainSprite->scale(1,1);
 		}
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) { //Crouch
-			
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !this->_jumping) { //Crouch
+			this->_mainSprite->setTextureRect(IntRect(46,0,46,50));
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !this->_jumping) { //Jump
 			
 		}
 		else { //Standing still
-			
+			if(this->_running) {
+				this->_running = false;
+				body->SetLinearVelocity(b2Vec2(0,0));
+			}
+
+			this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
 		}
 
 		this->setLastUpdate(milliseconds);
