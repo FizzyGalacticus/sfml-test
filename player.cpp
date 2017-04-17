@@ -51,11 +51,11 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 	this->_mainSprite->setPosition(Vector2f(position.x*M2P, position.y*M2P));
 	this->_mainSprite->setRotation(body->GetAngle()*R2D);
 
-	if(milliseconds > 50) {
+	if(this->getTimeSinceLastUpdate(milliseconds) > 55) {
 		sf::Vector2u windowSize = window->getSize();
 
-		if(this->_running && milliseconds > 200) {
-			this->_runningIndex = (this->_runningIndex < this->_runningRects.size() ? this->_runningIndex+1:0);
+		if(this->_running) {
+			this->_runningIndex = (this->_runningIndex < this->_runningRects.size()-1 ? this->_runningIndex+1:0);
 			this->_mainSprite->setTextureRect(this->_runningRects[this->_runningIndex]);
 		}
 
@@ -65,7 +65,7 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 				this->_direction = false;
 			}
 			this->_running = true;
-			body->SetTransform(b2Vec2(position.x-(0.05*P2M),position.y), body->GetAngle());
+			body->SetTransform(b2Vec2(position.x-(7.0*P2M),position.y), body->GetAngle());
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->_running) { //Running right
 			if(!this->_direction) {
@@ -73,25 +73,25 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 				this->_direction = true;
 			}
 			this->_running = true;
-			body->SetTransform(b2Vec2(position.x+(0.05*P2M),position.y), body->GetAngle());
+			body->SetTransform(b2Vec2(position.x+(7.0*P2M),position.y), body->GetAngle());
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !this->_jumping) { //Crouch
 			this->_mainSprite->setTextureRect(IntRect(46,0,46,50));
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !this->_jumping) { //Jump
-			
+			body->ApplyForce(b2Vec2(0,60000.0f), body->GetWorldCenter(), true);
 		}
 		else { //Standing still
 			if(this->_running) {
 				this->_running = false;
 				body->SetLinearVelocity(b2Vec2(0,0));
 			}
-
-			// this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
+			else 
+				this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
 		}
-	}
 
-	this->setLastUpdate(milliseconds);
+		this->setLastUpdate(milliseconds);
+	}
 
 	window->draw(*(this->_mainSprite));
 }
