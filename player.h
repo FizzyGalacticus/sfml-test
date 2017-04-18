@@ -24,6 +24,9 @@ class Player : public Drawable {
 		void update(RenderWindow * window, const uint64_t & milliseconds);
 		
 	private:
+		const b2Vec2 getPosition() const;
+		void setPosition(const b2Vec2 & newPos, const bool & setParentPosition);
+
 		shared_ptr<Texture> _texture;
 		shared_ptr<Sprite> _mainSprite;
 		vector<IntRect> _runningRects;
@@ -32,6 +35,7 @@ class Player : public Drawable {
 		unsigned int _jumpingIndex;
 		bool _jumping;
 		bool _running;
+		bool _crouching;
 		bool _direction;
 };
 

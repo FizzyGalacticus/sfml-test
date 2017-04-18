@@ -23,6 +23,9 @@ class Drawable : public GameObject {
 		b2World & getWorld();
 		b2Body * getBody();
 
+		const b2Vec2 getPosition() const;
+		void setPosition(const b2Vec2 & newPos);
+
 		void step();
 		
 	private:

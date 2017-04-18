@@ -38,7 +38,7 @@ _direction(true)
 
 		this->_mainSprite->setTexture(*(this->_texture));
 		this->_mainSprite->setTextureRect(IntRect(0,0,46,50));
-		this->_mainSprite->setPosition(Vector2f(200,GROUND_LEVEL));
+		this->setPosition(b2Vec2(WINDOW_WIDTH/2,GROUND_LEVEL), true);
 		this->_mainSprite->setOrigin(23,0);
 	}
 }
@@ -48,10 +48,13 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 	b2Body * body   = this->getBody();
 	b2Vec2 position = body->GetPosition();
 
+	cout << this->_mainSprite->getPosition().y << endl;
+	cout << position.y*M2P << endl;
+
 	this->_mainSprite->setPosition(Vector2f(position.x*M2P, position.y*M2P));
 	this->_mainSprite->setRotation(body->GetAngle()*R2D);
 
-	if(this->getTimeSinceLastUpdate(milliseconds) > 55) {
+	if(this->getTimeSinceLastUpdate(milliseconds) > 50) {
 		sf::Vector2u windowSize = window->getSize();
 
 		if(this->_running) {
@@ -65,7 +68,8 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 				this->_direction = false;
 			}
 			this->_running = true;
-			body->SetTransform(b2Vec2(position.x-(7.0*P2M),position.y), body->GetAngle());
+			// body->SetLinearVelocity(b2Vec2(-4*P2M, 0));
+			body->SetTransform(b2Vec2(position.x-(5.0*P2M),position.y), body->GetAngle());
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->_running) { //Running right
 			if(!this->_direction) {
@@ -73,13 +77,14 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 				this->_direction = true;
 			}
 			this->_running = true;
-			body->SetTransform(b2Vec2(position.x+(7.0*P2M),position.y), body->GetAngle());
+			body->SetTransform(b2Vec2(position.x+(5.0*P2M),position.y), body->GetAngle());
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !this->_jumping) { //Crouch
 			this->_mainSprite->setTextureRect(IntRect(46,0,46,50));
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !this->_jumping) { //Jump
-			body->ApplyForce(b2Vec2(0,60000.0f), body->GetWorldCenter(), true);
+			this->_jumping = true;
+			body->ApplyForce(b2Vec2(0,60000), body->GetWorldCenter(), true);
 		}
 		else { //Standing still
 			if(this->_running) {
@@ -94,4 +99,17 @@ void Player::update(RenderWindow * window, const uint64_t & milliseconds) {
 	}
 
 	window->draw(*(this->_mainSprite));
+}
+
+const b2Vec2 Player::getPosition() const {
+	Vector2f temp = this->_mainSprite->getPosition();
+
+	return b2Vec2(temp.x, temp.y);
+}
+
+void Player::setPosition(const b2Vec2 & newPos, const bool & setParentPosition) {
+	this->_mainSprite->setPosition(newPos.x, newPos.y);
+
+	if(setParentPosition)
+		this->Drawable::setPosition(b2Vec2(newPos.x, newPos.y));
 }
