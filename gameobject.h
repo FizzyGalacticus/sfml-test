@@ -11,8 +11,8 @@ class GameObject {
 	public:
 		GameObject();
 		~GameObject();
-		virtual void update(RenderWindow * window, const uint64_t & milliseconds);
-		static void updateAll(RenderWindow * window, const uint64_t & milliseconds);
+		virtual void update(RenderWindow * window, sf::Time clock);
+		static void updateAll(RenderWindow * window, sf::Time clock);
 		static void setDebugging(const bool debugging);
 		static bool getDebugging();
 

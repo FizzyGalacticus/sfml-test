@@ -17,14 +17,14 @@ GameObject::~GameObject() {
 	GameObject::_objects.erase(GameObject::_objects.begin()+this->_objIndex);
 }
 
-void GameObject::update(RenderWindow * window, const uint64_t & milliseconds) {
-	this->setLastUpdate(milliseconds);
-	cout << "Calling the wrong update function... =(" << endl;
+void GameObject::update(RenderWindow * window, sf::Time clock) {
+	// this->setLastUpdate(clock.getElapsedTime().asMilliseconds());
+	// cout << "Calling the wrong update function... =(" << endl;
 }
 
-void GameObject::updateAll(RenderWindow * window, const uint64_t & milliseconds) {
+void GameObject::updateAll(RenderWindow * window, sf::Time clock) {
 	for(auto obj : GameObject::_objects)
-		obj->update(window, milliseconds);
+		obj->update(window, clock);
 }
 
 void GameObject::setDebugging(const bool debugging) {

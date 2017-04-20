@@ -2,7 +2,10 @@
 #define __PLAYER_H_
 
 #include "constants.h"
-#include "drawable.h"
+
+#include "gameobject.h"
+
+#include "AnimatedSprite.hpp"
 
 #include <memory>
 using std::shared_ptr;
@@ -18,20 +21,29 @@ using sf::Vector2f;
 #include <vector>
 using std::vector;
 
-class Player : public Drawable {
+class Player : public GameObject {
 	public:
 		Player();
-		void update(RenderWindow * window, const uint64_t & milliseconds);
+		void update(RenderWindow * window, sf::Time clock);
+		const bool isJumping() const;
+		const bool isRunning() const;
+		const bool isAttacking() const;
+		const bool isCrouching() const;
 		
 	private:
+		void flipSprite();
+
 		shared_ptr<Texture> _texture;
-		shared_ptr<Sprite> _mainSprite;
-		vector<IntRect> _runningRects;
-		vector<IntRect> _jumpingRects;
-		unsigned int _runningIndex;
-		unsigned int _jumpingIndex;
-		bool _jumping;
-		bool _running;
+		AnimatedSprite _mainSprite;
+		const vector<IntRect> _runningRects;
+		const vector<IntRect> _jumpingRects;
+		const vector<IntRect> _attackingRects;
+		Animation _idleAnimation;
+		Animation _runningAnimation;
+		Animation _jumpingAnimation;
+		Animation _attackingAnimation;
+		Animation _crouchingAnimation;
+		Animation * _currentAnimation;
 		bool _direction;
 };
 
