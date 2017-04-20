@@ -17,7 +17,6 @@ _runningRects{
 		IntRect(322,150,46,50)
 	},
 _jumpingRects{
-		IntRect(322,0,46,50),
 		IntRect(276,0,46,50)
 	},
 _attackingRects {
@@ -109,6 +108,7 @@ void Player::update(RenderWindow * window, sf::Time clock) {
 		if(!(this->isJumping())) {
 			this->_currentAnimation = &this->_jumpingAnimation;
 			this->_mainSprite.play(*(this->_currentAnimation));
+			this->_mainSprite.setLooped(false);
 		}
 	}
 	else { //Standing still
