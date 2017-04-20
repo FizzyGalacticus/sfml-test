@@ -6,6 +6,7 @@
 #include "gameobject.h"
 #include "background.h"
 #include "player.h"
+#include "soundhandler.h"
 
 #include <iostream>
 using std::cout;
@@ -29,6 +30,7 @@ int main(int argc, char const *argv[])
 
 	Background gameBackground;
 	Player player;
+	SoundHandler sound;
 
 	sf::Clock clock;
 

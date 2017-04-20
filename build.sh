@@ -1,1 +1,1 @@
-g++ *.cpp -lsfml-window -lsfml-system -lsfml-graphics --std=c++0x
+g++ *.cpp -lsfml-window -lsfml-system -lsfml-graphics -lsfml-audio --std=c++0x
